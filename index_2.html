@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conner Bertz — Cybersecurity</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07070e;
+  --surface: #0f0f1a;
+  --surface2: #141425;
+  --border: rgba(255,255,255,0.07);
+  --text: #e8e8f0;
+  --muted: #888899;
+  --p1: #7c3aed;
+  --p2: #ec4899;
+  --c1: #06b6d4;
+  --c2: #10b981;
+  --a1: #f59e0b;
+  --grad-purple: linear-gradient(135deg, #7c3aed, #ec4899);
+  --grad-cyan:   linear-gradient(135deg, #06b6d4, #10b981);
+  --grad-amber:  linear-gradient(135deg, #f59e0b, #ef4444);
+  --grad-blue:   linear-gradient(135deg, #3b82f6, #7c3aed);
+  --grad-pink:   linear-gradient(135deg, #ec4899, #8b5cf6);
+  --grad-teal:   linear-gradient(135deg, #10b981, #06b6d4);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── ANIMATED ORB BACKGROUND ── */
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(110px); opacity: 0.18;
+  pointer-events: none; z-index: 0;
+  animation: orbdrift 16s ease-in-out infinite alternate;
+}
+.orb1 { width: 700px; height: 700px; background: #7c3aed; top: -250px; left: -250px; animation-delay: 0s; }
+.orb2 { width: 550px; height: 550px; background: #06b6d4; bottom: -200px; right: -150px; animation-delay: -5s; }
+.orb3 { width: 450px; height: 450px; background: #ec4899; top: 40%; left: 35%; animation-delay: -10s; }
+@keyframes orbdrift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(50px,-50px) scale(1.1); }
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 56px;
+  background: rgba(7,7,14,0.8);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: -0.3px;
+  background: var(--grad-purple); -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; background-clip: text;
+}
+nav ul { list-style: none; display: flex; gap: 36px; }
+nav a {
+  color: var(--muted); text-decoration: none;
+  font-size: 13px; font-weight: 500; letter-spacing: 0.5px;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--text); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 120px 56px 80px;
+  position: relative; z-index: 1; gap: 60px;
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(124,58,237,0.15);
+  border: 1px solid rgba(124,58,237,0.35);
+  color: #a78bfa; font-size: 12px; font-weight: 500;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 24px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #a78bfa;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+.hero-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(52px, 5.5vw, 84px);
+  font-weight: 800; line-height: .95; letter-spacing: -2px;
+  color: var(--text); margin-bottom: 20px;
+}
+.hero-name .grad {
+  display: block;
+  background: var(--grad-purple);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-sub {
+  font-size: 16px; color: var(--muted); font-weight: 300;
+  max-width: 440px; margin-bottom: 36px; line-height: 1.8;
+}
+.hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-primary {
+  display: inline-block; padding: 13px 30px;
+  background: var(--grad-purple); color: #fff;
+  font-weight: 600; font-size: 14px; border-radius: 100px;
+  text-decoration: none; transition: opacity .2s, transform .2s;
+}
+.btn-primary:hover { opacity: .85; transform: translateY(-2px); }
+
+.btn-outline {
+  display: inline-block; padding: 13px 30px; background: transparent;
+  border: 1px solid rgba(255,255,255,0.18); color: var(--text);
+  font-weight: 500; font-size: 14px; border-radius: 100px;
+  text-decoration: none; transition: border-color .2s, transform .2s;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,.4); transform: translateY(-2px); }
+
+/* Hero stat cards */
+.hero-right {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  position: relative; z-index: 1;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px; position: relative; overflow: hidden;
+  transition: transform .3s, border-color .3s;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.sc-purple::before { background: var(--grad-purple); }
+.sc-cyan::before   { background: var(--grad-cyan); }
+.sc-amber::before  { background: var(--grad-amber); }
+.sc-pink::before   { background: var(--grad-pink); }
+.stat-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.15); }
+
+.stat-num {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; line-height: 1; margin-bottom: 4px;
+}
+.sc-purple .stat-num { background: var(--grad-purple); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.sc-cyan   .stat-num { background: var(--grad-cyan);   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.sc-amber  .stat-num { background: var(--grad-amber);  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.sc-pink   .stat-num { background: var(--grad-pink);   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.stat-label { font-size: 12px; color: var(--muted); }
+.stat-card.wide { grid-column: span 2; }
+
+/* ── SECTION SHELL ── */
+.swrap { max-width: 1160px; margin: 0 auto; padding: 100px 56px; position: relative; z-index: 1; }
+
+.sec-label {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 52px;
+}
+.sec-label .num {
+  font-family: 'Fira Code', monospace; font-size: 12px; color: var(--muted); opacity: .6;
+}
+.sec-label h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 34px; font-weight: 800;
+  letter-spacing: -0.5px; color: var(--text);
+}
+.sec-label .line {
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, rgba(255,255,255,.08), transparent);
+}
+
+/* ── SKILLS ── */
+#skills { background: var(--surface); }
+
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+.skill-block {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 18px; padding: 28px;
+  transition: transform .3s, border-color .3s;
+}
+.skill-block:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.13); }
+
+.skill-hd {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+}
+.skill-ico {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.sico-purple { background: rgba(124,58,237,.15); }
+.sico-cyan   { background: rgba(6,182,212,.15); }
+.sico-amber  { background: rgba(245,158,11,.15); }
+.sico-green  { background: rgba(16,185,129,.15); }
+
+.skill-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700; color: var(--text); }
+
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 100px; padding: 4px 13px; font-size: 12px; color: var(--muted);
+  transition: background .2s, color .2s, border-color .2s; cursor: default;
+}
+.pill:hover { background: rgba(124,58,237,.2); color: #c4b5fd; border-color: rgba(124,58,237,.4); }
+
+/* ── PROJECTS ── */
+#projects { background: var(--bg); }
+
+.proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+.pcard {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 22px; padding: 30px;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  transition: transform .3s, border-color .3s;
+}
+.pcard::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  opacity: 0; transition: opacity .3s;
+}
+.pcard:hover { transform: translateY(-6px); border-color: rgba(255,255,255,.14); }
+.pcard:hover::after { opacity: 1; }
+
+.pg1::after { background: var(--grad-purple); }
+.pg2::after { background: var(--grad-cyan); }
+.pg3::after { background: var(--grad-amber); }
+.pg4::after { background: var(--grad-pink); }
+.pg5::after { background: var(--grad-teal); }
+.pg6::after { background: var(--grad-blue); }
+.pg7::after { background: linear-gradient(135deg,#f59e0b,#ec4899); }
+.pg8::after { background: linear-gradient(135deg,#3b82f6,#10b981); }
+
+.pbadge {
+  display: inline-block;
+  font-family: 'Fira Code', monospace; font-size: 10px; font-weight: 500;
+  letter-spacing: 1px; padding: 4px 10px; border-radius: 6px;
+  margin-bottom: 16px; text-transform: uppercase;
+}
+.b-mal  { background: rgba(239,68,68,.15);   color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
+.b-sec  { background: rgba(124,58,237,.15);  color: #c4b5fd; border: 1px solid rgba(124,58,237,.25); }
+.b-net  { background: rgba(6,182,212,.15);   color: #67e8f9; border: 1px solid rgba(6,182,212,.25); }
+.b-pol  { background: rgba(16,185,129,.15);  color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+.b-re   { background: rgba(245,158,11,.15);  color: #fcd34d; border: 1px solid rgba(245,158,11,.25); }
+.b-cry  { background: rgba(59,130,246,.15);  color: #93c5fd; border: 1px solid rgba(59,130,246,.25); }
+
+.pname {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--text); line-height: 1.3; margin-bottom: 6px;
+}
+.pcourse {
+  font-size: 11px; color: var(--muted); font-family: 'Fira Code', monospace;
+  margin-bottom: 14px; opacity: .7;
+}
+.pdesc { font-size: 13px; color: var(--muted); line-height: 1.8; flex: 1; margin-bottom: 20px; }
+
+/* expandable "deep dive" */
+.pdetail {
+  font-size: 12px; color: var(--muted); line-height: 1.75;
+  border-top: 1px solid var(--border); padding-top: 14px; margin-bottom: 16px;
+  display: none;
+}
+.pdetail.open { display: block; }
+.pdetail ul { list-style: none; padding: 0; }
+.pdetail li { padding: 3px 0 3px 16px; position: relative; }
+.pdetail li::before { content: '▸'; position: absolute; left: 0; color: #7c3aed; font-size: 10px; top: 5px; }
+
+.pcard-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.techs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tech {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 6px; padding: 3px 10px;
+  font-size: 11px; font-family: 'Fira Code', monospace; color: var(--muted);
+}
+
+.expand-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; padding: 4px 12px;
+  font-size: 11px; color: var(--muted); cursor: pointer;
+  font-family: 'Fira Code', monospace;
+  transition: border-color .2s, color .2s; white-space: nowrap;
+}
+.expand-btn:hover { border-color: rgba(124,58,237,.5); color: #c4b5fd; }
+
+/* ── EXPERIENCE ── */
+#experience { background: var(--surface); }
+.exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.ecard {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 32px;
+  transition: transform .3s, border-color .3s;
+}
+.ecard:hover { transform: translateY(-3px); border-color: rgba(255,255,255,.12); }
+
+.eperiod {
+  font-family: 'Fira Code', monospace; font-size: 11px; color: var(--c1);
+  letter-spacing: .5px; margin-bottom: 10px; opacity: .8;
+}
+.erole { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.eorg  { font-size: 13px; color: var(--p1); margin-bottom: 18px; font-weight: 500; }
+
+.elist { list-style: none; }
+.elist li {
+  font-size: 13px; color: var(--muted); padding: 5px 0 5px 20px;
+  position: relative; line-height: 1.65;
+}
+.elist li::before { content: '▸'; position: absolute; left: 0; color: var(--p1); font-size: 11px; top: 7px; }
+
+/* ── CONTACT ── */
+#contact {
+  background: var(--bg); text-align: center;
+  padding: 120px 56px; position: relative; z-index: 1; overflow: hidden;
+}
+.contact-glow {
+  position: absolute; width: 600px; height: 600px; background: #7c3aed;
+  border-radius: 50%; filter: blur(130px); opacity: .1;
+  top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none;
+}
+.contact-kicker {
+  font-family: 'Fira Code', monospace; font-size: 12px; color: var(--c1);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.contact-h {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(36px, 5vw, 60px); font-weight: 800; letter-spacing: -1px;
+  color: var(--text); line-height: 1.1; margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.contact-h span { background: var(--grad-purple); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+.contact-sub {
+  font-size: 16px; color: var(--muted); font-weight: 300;
+  max-width: 480px; margin: 0 auto 44px; position: relative; z-index: 1;
+}
+.clinks { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+.clink {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border-radius: 100px;
+  text-decoration: none; font-weight: 500; font-size: 14px;
+  color: #fff; transition: transform .2s, opacity .2s;
+}
+.clink:hover { transform: translateY(-3px); opacity: .85; }
+.cl-email  { background: var(--grad-purple); }
+.cl-phone  { background: var(--grad-cyan); }
+.cl-github { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); }
+.cl-li     { background: rgba(6,182,212,.15); border: 1px solid rgba(6,182,212,.3); color: var(--c1); }
+
+footer {
+  text-align: center; padding: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted); opacity: .5;
+}
+
+/* ── SCROLL REVEAL ── */
+.rv { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.rv.on { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  #hero { grid-template-columns: 1fr; padding: 110px 28px 60px; }
+  .hero-right { display: none; }
+  .swrap { padding: 80px 28px; }
+  nav { padding: 16px 28px; }
+  nav ul { display: none; }
+  .proj-grid { grid-template-columns: 1fr; }
+  .exp-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Conner Bertz</div>
+  <ul>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="rv" style="position:relative;z-index:1;">
+    <div class="hero-eyebrow">UNC Wilmington &bull; May 2026</div>
+    <h1 class="hero-name">Conner<span class="grad">Bertz</span></h1>
+    <p class="hero-sub">Cybersecurity student specializing in Cyber Operations — building real tools in cryptography, malware analysis, and secure systems. Proficient in Python, C/C++, Kali Linux, and offensive security tooling.</p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-right rv" style="transition-delay:.15s">
+    <div class="stat-card sc-purple rv"><div class="stat-num">8+</div><div class="stat-label">Security Projects</div></div>
+    <div class="stat-card sc-cyan rv" style="transition-delay:.1s"><div class="stat-num">5+</div><div class="stat-label">Crypto Algorithms</div></div>
+    <div class="stat-card sc-amber rv" style="transition-delay:.2s"><div class="stat-num">3</div><div class="stat-label">Languages</div></div>
+    <div class="stat-card sc-pink rv" style="transition-delay:.3s"><div class="stat-num">2026</div><div class="stat-label">Graduation</div></div>
+    <div class="stat-card sc-cyan wide rv" style="transition-delay:.35s">
+      <div class="stat-num" style="font-size:26px;letter-spacing:-0.5px;">Cyber Operations</div>
+      <div class="stat-label">B.S. Cybersecurity Concentration</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+<div class="swrap">
+  <div class="sec-label rv"><span class="num">01 //</span><h2>Technical Skills</h2><div class="line"></div></div>
+  <div class="skills-grid">
+    <div class="skill-block rv">
+      <div class="skill-hd"><div class="skill-ico sico-purple">🖥</div><div class="skill-title">Operating Systems</div></div>
+      <div class="pills">
+        <span class="pill">Windows</span><span class="pill">Kali Linux</span>
+        <span class="pill">Ubuntu</span><span class="pill">Flare VM</span><span class="pill">Windows Server</span>
+      </div>
+    </div>
+    <div class="skill-block rv" style="transition-delay:.1s">
+      <div class="skill-hd"><div class="skill-ico sico-cyan">⌨️</div><div class="skill-title">Programming</div></div>
+      <div class="pills">
+        <span class="pill">Python</span><span class="pill">C</span><span class="pill">C++</span>
+        <span class="pill">Bash</span><span class="pill">PowerShell</span>
+      </div>
+    </div>
+    <div class="skill-block rv" style="transition-delay:.2s">
+      <div class="skill-hd"><div class="skill-ico sico-amber">🔐</div><div class="skill-title">Security Tools</div></div>
+      <div class="pills">
+        <span class="pill">Wireshark</span><span class="pill">Nmap</span><span class="pill">Burp Suite</span>
+        <span class="pill">Metasploit</span><span class="pill">IDA Pro</span>
+        <span class="pill">pfSense</span><span class="pill">VMware</span>
+      </div>
+    </div>
+    <div class="skill-block rv" style="transition-delay:.3s">
+      <div class="skill-hd"><div class="skill-ico sico-green">📋</div><div class="skill-title">Frameworks &amp; Concepts</div></div>
+      <div class="pills">
+        <span class="pill">NIST 800-53</span><span class="pill">ISO 27001</span>
+        <span class="pill">RSA / AES / SHA-256</span><span class="pill">Zero Trust</span>
+        <span class="pill">ASLR</span><span class="pill">Incident Response</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+<div class="swrap">
+  <div class="sec-label rv"><span class="num">02 //</span><h2>Projects</h2><div class="line"></div></div>
+  <div class="proj-grid">
+
+    <!-- 1 -->
+    <div class="pcard pg1 rv">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">Hybrid Email Encryption Protocol</div>
+      <div class="pcourse">// CSC 424 — Security Tools &amp; Engineering</div>
+      <div class="pdesc">Implemented a complete end-to-end secure messaging protocol in Python combining asymmetric RSA-2048 for key exchange with AES-256-CBC for message encryption, plus SHA-256 digital signatures to guarantee both confidentiality and authenticity.</div>
+      <div class="pdetail" id="d1">
+        <ul>
+          <li>Sender generates a fresh 256-bit AES session key per message using <code>os.urandom(32)</code>, encrypts the plaintext with AES-CBC, then wraps the session key using the receiver's RSA-2048 public key via OAEP/SHA-256 padding — so the session key is never sent in the clear</li>
+          <li>Digital signature pipeline: SHA-256 hashes the plaintext, sender signs that hash with their RSA private key using PKCS1v15; receiver re-hashes the decrypted plaintext and verifies the signature against the sender's public key, catching both tampering and impersonation</li>
+          <li>Manual PKCS#7 padding implementation for AES block alignment — pad bytes equal the padding length, fully reversible on decryption</li>
+          <li>Designed as a two-party system (sender/receiver key pairs isolated), demonstrating the complete TLS-style handshake concept at a protocol level</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">RSA-2048</span><span class="tech">AES-256-CBC</span>
+          <span class="tech">SHA-256</span><span class="tech">Python cryptography</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d1',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="pcard pg2 rv" style="transition-delay:.08s">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">Multi-Method Spam Detection Engine</div>
+      <div class="pcourse">// CSC 424 — Security Tools &amp; Engineering</div>
+      <div class="pdesc">Built a Python spam classifier applying three independent detection methods — MD5 signature hashing, live URL/SSL analysis, and unsubscribe pattern scanning — voting to classify email as spam only when at least two methods agree.</div>
+      <div class="pdetail" id="d2">
+        <ul>
+          <li>Signature engine: normalizes email text to uppercase, computes MD5 digest, and checks against a hash database of known spam; also applies 6 compiled regex patterns for high-signal spam phrases (lottery, urgency, pharma, phishing keywords)</li>
+          <li>Hyperlink analyzer: extracts all URLs via regex, flags suspicious TLDs (.tk, .ml, .ga, .xyz), detects raw IP addresses in links, and attempts a live SSL socket connection on port 443 — marking HTTP-only links and certificate failures as threat indicators</li>
+          <li>Unsubscribe checker: scans the full body and final 200 characters for opt-out patterns; legitimate bulk mail almost always includes these, so their absence is a spam signal</li>
+          <li>Voting logic: each method casts a binary spam/not-spam vote; final classification is SPAM if score ≥ 2/3, reducing both false positives and false negatives compared to single-method approaches</li>
+          <li>Includes a demo mode with 4 pre-built test cases (obvious spam, legit newsletter, borderline promo, phishing) with expected vs. actual output comparison</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">MD5 Hashing</span><span class="tech">SSL/TLS</span>
+          <span class="tech">Regex</span><span class="tech">Python</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d2',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="pcard pg3 rv" style="transition-delay:.16s">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">Caesar Cipher — 5 Implementations</div>
+      <div class="pcourse">// Cryptography Coursework</div>
+      <div class="pdesc">Implemented the Caesar shift cipher five distinct ways in Python — iterative, compact one-liner, list comprehension, bitwise bytearray manipulation, and alphabet indexing — to deeply explore character encoding, modular arithmetic, and Python performance trade-offs.</div>
+      <div class="pdetail" id="d3">
+        <ul>
+          <li>Standard iterative version: manually separates ASCII offset subtraction, modular shift, and re-encoding into discrete steps to make the math explicit; handles both upper and lowercase independently</li>
+          <li>Bitwise implementation: converts the entire message to a bytearray, creates a parallel shift array, and performs addition with a bitwise AND mask to clear overflow — operates on all characters simultaneously at the byte level rather than char-by-char</li>
+          <li>Comprehension version: single-expression encryption using a conditional list comprehension and <code>str.join</code>, demonstrating Pythonic style while preserving correctness</li>
+          <li>Index-based version: uses <code>ascii_lowercase.index()</code> to map characters into a 26-element alphabet array, shifting by index rather than ASCII math — a different mental model that's more readable for teaching purposes</li>
+          <li>Companion decrypt module uses the inverse shift <code>(char - key) % 26</code>, implemented symmetrically to the encrypt logic</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">Python</span><span class="tech">Modular Arithmetic</span>
+          <span class="tech">Bytearrays</span><span class="tech">ASCII Encoding</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d3',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="pcard pg4 rv">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">Monoalphabetic Substitution Cipher</div>
+      <div class="pcourse">// Cryptography Coursework</div>
+      <div class="pdesc">Implemented the monoalphabetic substitution cipher two ways — a dictionary-based character mapping and a 26-character alphabet permutation string — including a general-purpose inverse key function for decryption, with a CLI driver supporting both encrypt and decrypt modes.</div>
+      <div class="pdetail" id="d4">
+        <ul>
+          <li>Dictionary method: key is a <code>dict[str,str]</code> mapping each plaintext letter to its ciphertext substitute; <code>get_inverse_key</code> reverses the mapping via a dict comprehension, enabling decryption with the same encrypt function</li>
+          <li>Permutation method: key is a 26-char uppercase string where position <em>i</em> gives the ciphertext letter for plaintext letter <em>i</em>; validation ensures the key is a true permutation (all 26 letters present, no repeats)</li>
+          <li>Inverse permutation algorithm: iterates the key and sets <code>inv_key[ord(char)-65] = chr(idx+65)</code> — constructing the reverse lookup table in O(n) without sorting</li>
+          <li>CLI driver validates key input interactively, rejecting non-permutation strings with an example hint, keeping the interface user-proof</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">Python</span><span class="tech">Dict Mapping</span>
+          <span class="tech">Permutation Validation</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d4',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="pcard pg5 rv" style="transition-delay:.08s">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">One-Time Pad &amp; XOR Encryption</div>
+      <div class="pcourse">// Cryptography Coursework</div>
+      <div class="pdesc">Built two implementations of one-time pad encryption — a single-character XOR demonstrator and a full message-level OTP — illustrating the theoretical basis of information-theoretically secure encryption and why key reuse breaks the scheme entirely.</div>
+      <div class="pdetail" id="d5">
+        <ul>
+          <li>Single-character version: converts two characters to their ASCII values and XORs them, producing output that demonstrates reversibility — XOR-ing the result with either original input recovers the other, the foundation of symmetric stream ciphers</li>
+          <li>Full OTP: iterates both message and key character-by-character, XOR-ing ASCII values and converting back via <code>chr()</code>; produces ciphertext that is provably unbreakable when the key is truly random, same length as the message, and never reused</li>
+          <li>Implementation deliberately exposes each step (msg_val, key_val, xor_val, xor_char) as named variables rather than collapsing them — designed as a teaching tool to make the XOR operation transparent</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">XOR Operations</span><span class="tech">Python</span>
+          <span class="tech">Stream Cipher Theory</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d5',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="pcard pg6 rv" style="transition-delay:.16s">
+      <div class="pbadge b-cry">Cryptography</div>
+      <div class="pname">Vigenère Cipher Decryption</div>
+      <div class="pcourse">// Cryptography Coursework</div>
+      <div class="pdesc">Implemented Vigenère cipher decryption in Python — a polyalphabetic substitution scheme that cycles a keyword across the ciphertext, dramatically increasing resistance to frequency analysis compared to simple Caesar or monoalphabetic ciphers.</div>
+      <div class="pdetail" id="d6">
+        <ul>
+          <li>Key cycling via <code>idx % keyword_length</code> — each ciphertext character is shifted back by the corresponding keyword character's value, with the keyword repeating transparently across the full message length</li>
+          <li>Correctly handles mixed-case input: detects uppercase/lowercase independently, applies the appropriate ASCII offset (65 or 97), and decrypts with <code>(cipher_val - keyword_val) % 26</code> to always land in the valid alphabet range</li>
+          <li>Non-alphabetic characters (spaces, punctuation) pass through unchanged — preserving message structure while only decrypting actual letters</li>
+          <li>Demonstrates why Vigenère resisted cryptanalysis for 300 years: the same plaintext letter encrypts differently depending on its position in the message, flattening frequency distributions that break Caesar and MAS ciphers</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">Python</span><span class="tech">Polyalphabetic Cipher</span>
+          <span class="tech">Modular Arithmetic</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d6',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="pcard pg7 rv">
+      <div class="pbadge b-mal">Malware Analysis</div>
+      <div class="pname">Binary Obfuscation &amp; Anti-Reverse Engineering</div>
+      <div class="pcourse">// CSC 466 — Malware Analysis</div>
+      <div class="pdesc">Group project applying binary code obfuscation and anti-reverse engineering techniques using the Tigress C diversification tool, exploring the same hardening strategies used by real-world malware to defeat static disassembly and dynamic analysis.</div>
+      <div class="pdetail" id="d7">
+        <ul>
+          <li>Applied Tigress transformations including control-flow flattening, opaque predicates, and function inlining to make decompiled output unreadable even in IDA Pro without significant manual effort</li>
+          <li>Compared transformed binaries against originals in a disassembler to measure the concrete impact on analyst time and readability</li>
+          <li>Studied how AV/EDR products attempt to detect obfuscated binaries through entropy analysis and heuristic signatures — and where those approaches fail against well-crafted obfuscation</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">Tigress</span><span class="tech">C</span>
+          <span class="tech">IDA Pro</span><span class="tech">Binary Analysis</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d7',this)">+ details</button>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="pcard pg8 rv" style="transition-delay:.08s">
+      <div class="pbadge b-sec">Vulnerability Research</div>
+      <div class="pname">CVE-2021-3156 "Baron Samedit" Analysis</div>
+      <div class="pcourse">// CSC 358 — Cyber Operations</div>
+      <div class="pdesc">Deep-dive analysis of the heap-based buffer overflow in sudo (CVE-2021-3156) affecting all major Linux distributions. Documented the full vulnerability chain from root cause to exploitation mechanics to remediation, including evaluation of runtime mitigations.</div>
+      <div class="pdetail" id="d8">
+        <ul>
+          <li>Root cause: sudo failed to escape single backslashes in user arguments when MODE_SHELL or MODE_LOGIN_SHELL was active — in theory all backslashes should be doubled before this stage, but a code path allowed a lone trailing backslash, triggering a heap write-what-where condition</li>
+          <li>Impact: any local user (no sudo privileges required) could escalate to root on any unpatched Linux system — affected ~10 years of sudo releases before being caught by Qualys researchers in January 2021</li>
+          <li>Evaluated mitigations: patch to sudo 1.9.5p2, restricting sudoers access, ASLR + hardened malloc (Hardened Malloc) as runtime defenses, and RBAC implementation to contain blast radius even if exploitation succeeds</li>
+        </ul>
+      </div>
+      <div class="pcard-foot">
+        <div class="techs">
+          <span class="tech">Linux</span><span class="tech">Heap Overflow</span>
+          <span class="tech">CVE Analysis</span><span class="tech">ASLR</span>
+        </div>
+        <button class="expand-btn" onclick="toggle('d8',this)">+ details</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+<div class="swrap">
+  <div class="sec-label rv"><span class="num">03 //</span><h2>Education</h2><div class="line"></div></div>
+  <div class="exp-grid">
+    <div class="ecard rv">
+      <div class="eperiod">AUG 2022 — MAY 2026</div>
+      <div class="erole">B.S. Cybersecurity</div>
+      <div class="eorg">UNC Wilmington — Concentration: Cyber Operations</div>
+      <ul class="elist">
+        <li>Hands-on lab work through HackTheBox (HTB) for real-world penetration testing practice</li>
+        <li>Applied NIST 800-53 and ISO 27001 frameworks to realistic incident response and access control scenarios</li>
+        <li>Coursework spanning ethical hacking, malware analysis, cryptography, secure programming, and network security</li>
+        <li>Built multiple working cryptographic tools in Python covering classical and modern cipher techniques</li>
+      </ul>
+    </div>
+    <div class="ecard rv" style="transition-delay:.1s">
+      <div class="eperiod">RELEVANT COURSES</div>
+      <div class="erole">Technical Curriculum</div>
+      <div class="eorg">College of Science &amp; Engineering</div>
+      <ul class="elist">
+        <li>CSC 358: Cyber Operations — CVE analysis, HackTheBox labs, penetration testing fundamentals</li>
+        <li>CSC 424: Security Tools &amp; Engineering — Applied cryptographic protocols, spam detection, email security</li>
+        <li>CSC 466: Malware Analysis — Binary obfuscation, process injection, reverse engineering with IDA Pro</li>
+        <li>CYBR 322: Industry case studies, MFA attacks, gig economy security, regulatory compliance</li>
+        <li>Information Assurance — NIST 800-53, ISO 27001, PIV access control, incident response policy</li>
+        <li>Cryptography — Classical ciphers (Caesar, MAS, Vigenère, OTP) through modern AES/RSA protocols</li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-glow"></div>
+  <div class="contact-kicker rv">Let's connect</div>
+  <h2 class="contact-h rv">Open to <span>opportunities</span></h2>
+  <p class="contact-sub rv">Actively looking for cybersecurity internships and entry-level roles. Reach out anytime.</p>
+  <div class="clinks rv">
+    <a href="mailto:conner.bertz@outlook.com" class="clink cl-email">✉ conner.bertz@outlook.com</a>
+    <a href="tel:9196189815" class="clink cl-phone">◎ (919) 618-9815</a>
+    <a href="https://github.com/" target="_blank" class="clink cl-github">⎇ GitHub</a>
+    <a href="https://linkedin.com/" target="_blank" class="clink cl-li">⊡ LinkedIn</a>
+  </div>
+</section>
+
+<footer>&copy; 2026 Conner Bertz &nbsp;·&nbsp; Cybersecurity, UNCW</footer>
+
+<script>
+function toggle(id, btn) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? '− details' : '+ details';
+}
+
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const delay = parseFloat(e.target.style.transitionDelay || 0) * 1000;
+      setTimeout(() => e.target.classList.add('on'), delay);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
